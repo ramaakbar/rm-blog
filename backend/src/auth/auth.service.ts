@@ -56,7 +56,6 @@ export class AuthService {
     });
 
     if (!user) throw new UnauthorizedException('Email not found');
-    console.log(user);
 
     const checkPass = await argon.verify(user.password, dto.password);
 
