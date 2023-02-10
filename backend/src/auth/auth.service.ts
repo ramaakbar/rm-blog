@@ -26,13 +26,12 @@ export class AuthService {
     const hashedPass = await argon.hash(dto.password);
 
     try {
-      const user = new User();
-      user.email = dto.email;
-      user.username = dto.username;
-      user.password = hashedPass;
-      user.picture = 'https://randomuser.me/api/portraits/men/32.jpg';
-
-      const { id, email, username } = await this.usersRepository.save(user);
+      const { id, email, username } = await this.usersRepository.save({
+        email: dto.email,
+        username: dto.username,
+        password: hashedPass,
+        picture: 'https://randomuser.me/api/portraits/men/32.jpg',
+      });
 
       return {
         message: 'successfully created account',
