@@ -3,8 +3,7 @@ import { Comment } from 'src/comments/comment.entity';
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -29,9 +28,8 @@ export class Post {
   @Column()
   thumbnail: number;
 
-  @ManyToMany(() => Category, (category) => category.posts)
-  @JoinTable()
-  categories: Category[];
+  @ManyToOne(() => Category, (category) => category.posts)
+  category: Category;
 
   @OneToMany(() => Comment, (comment) => comment.post, {
     eager: true,
