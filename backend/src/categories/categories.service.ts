@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Category } from './category.entity';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    @InjectRepository(Category)
+    private categoriesRepository: Repository<Category>,
+  ) {}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    try {
+      const createdCategory = await this.categoriesRepository.save({
+        name: createCategoryDto.name,
+      });
+      return {
+        message: 'Successfully create new category',
+        data: {
+          name: createdCategory.name,
+        },
+      };
+    } catch (error) {
+      if (error.errno === 1062)
+        throw new BadRequestException('Category name is already used');
+      throw new BadRequestException(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    const categories = await this.categoriesRepository.find();
+    return {
+      message: 'successfully retrieve all categories',
+      data: categories,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
-
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    try {
+      const updatedCategory = await this.categoriesRepository.save({
+        id,
+        name: updateCategoryDto.name,
+      });
+      return {
+        message: 'Category has succesfully updated',
+        data: updatedCategory,
+      };
+    } catch (error) {
+      if (error.errno === 1062)
+        throw new BadRequestException('Category name is already used');
+      throw new BadRequestException(error);
+    }
   }
 }
