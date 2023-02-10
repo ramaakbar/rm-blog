@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
@@ -13,7 +14,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private usersRepository: Repository<User>,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        JwtStrategy.extractJWT,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
+      ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     });
   }
@@ -26,5 +31,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
     delete user.password;
     return user;
+  }
+
+  private static extractJWT(req: Request) {
+    if (req.cookies && 'access_token' in req.cookies) {
+      return req.cookies.access_token;
+    }
+    return null;
   }
 }

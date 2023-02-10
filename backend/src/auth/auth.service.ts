@@ -9,6 +9,8 @@ import { Repository } from 'typeorm';
 import { LoginDto, RegisterDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
+import { response, Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +18,7 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -47,7 +50,7 @@ export class AuthService {
     }
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, res: Response) {
     const user = await this.usersRepository.findOne({
       where: {
         email: dto.email,
@@ -62,10 +65,20 @@ export class AuthService {
 
     const payload = { sub: user.id, email: user.email };
 
+    const access_token = this.jwtService.sign(payload);
+
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure:
+        this.configService.get('APP_ENV') === 'development' ? false : true,
+      sameSite: 'none',
+      maxAge: 60000,
+    });
+
     return {
       message: 'successfully login',
       data: {
-        access_token: this.jwtService.sign(payload),
+        access_token: access_token,
       },
     };
   }
