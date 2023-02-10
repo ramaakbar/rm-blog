@@ -25,7 +25,7 @@ describe('Auth e2e Test', () => {
   });
 
   const dto = {
-    email: 'rama.akbar@ymail.com',
+    email: 'rama.akbar@yahoo.com',
     username: 'akbarrama',
     password: 'password',
     passwordConfirmation: 'password',
