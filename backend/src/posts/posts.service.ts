@@ -53,23 +53,57 @@ export class PostsService {
     };
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const post = await this.postsRepository.findOne({
       where: {
         id,
       },
     });
+
+    if (!post) throw new BadRequestException('Post not found');
+
     return {
-      message: 'successfully retrive post',
+      message: 'successfully retrieve post',
       data: post,
     };
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: string, updatePostDto: UpdatePostDto) {
+    try {
+      const post = await this.postsRepository.findOne({
+        where: {
+          id,
+        },
+      });
+
+      if (!post) throw new BadRequestException('Post not found');
+
+      await this.postsRepository.update(id, updatePostDto);
+
+      return {
+        message: 'successfully update post',
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: string) {
+    try {
+      const post = await this.postsRepository.findOne({
+        where: {
+          id,
+        },
+      });
+
+      if (!post) throw new BadRequestException('Post not found');
+
+      await this.postsRepository.delete(id);
+      return {
+        message: 'successfully delete post',
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
