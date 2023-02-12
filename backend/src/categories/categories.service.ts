@@ -25,7 +25,7 @@ export class CategoriesService {
     } catch (error) {
       if (error.errno === 1062)
         throw new BadRequestException('Category name is already used');
-      throw new BadRequestException(error);
+      throw new BadRequestException(error.response);
     }
   }
 
@@ -39,18 +39,18 @@ export class CategoriesService {
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     try {
-      const updatedCategory = await this.categoriesRepository.save({
-        id,
-        name: updateCategoryDto.name,
-      });
+      const category = await this.categoriesRepository.findOneBy({ id });
+
+      if (!category) throw new BadRequestException('Category not found');
+
+      await this.categoriesRepository.update(id, updateCategoryDto);
       return {
         message: 'Category has succesfully updated',
-        data: updatedCategory,
       };
     } catch (error) {
       if (error.errno === 1062)
         throw new BadRequestException('Category name is already used');
-      throw new BadRequestException(error);
+      throw new BadRequestException(error.message);
     }
   }
 }
