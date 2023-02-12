@@ -2,10 +2,12 @@ import { Category } from 'src/categories/category.entity';
 import { Comment } from 'src/comments/comment.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -37,4 +39,10 @@ export class Post {
     eager: true,
   })
   comments: Comment[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
