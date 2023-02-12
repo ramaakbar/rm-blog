@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostsService } from './posts.service';
+import { MinioClientService } from './minio-client.service';
 
-describe('PostsService', () => {
-  let service: PostsService;
+describe('MinioClientService', () => {
+  let service: MinioClientService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PostsService],
+      providers: [MinioClientService],
     }).compile();
 
-    service = module.get<PostsService>(PostsService);
+    service = module.get<MinioClientService>(MinioClientService);
   });
 
   it('should be defined', () => {

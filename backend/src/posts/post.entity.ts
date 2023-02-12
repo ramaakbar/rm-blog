@@ -19,14 +19,16 @@ export class Post {
   @Column('text')
   body: string;
 
-  @Column('double')
+  @Column('double', {
+    default: 0,
+  })
   views: number;
 
-  @Column()
+  @Column('double', { default: 0 })
   likes: number;
 
-  @Column()
-  thumbnail: number;
+  @Column({ nullable: true })
+  thumbnail: string;
 
   @ManyToOne(() => Category, (category) => category.posts)
   category: Category;

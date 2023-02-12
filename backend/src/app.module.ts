@@ -9,11 +9,13 @@ import { CategoriesModule } from './categories/categories.module';
 import { DataSource } from 'typeorm';
 import { dataSourceOptions } from 'db/data-source';
 import { AuthModule } from './auth/auth.module';
+import { MinioClientModule } from './minio-client/minio-client.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(dataSourceOptions),
+    MinioClientModule,
     UsersModule,
     PostsModule,
     CommentsModule,
