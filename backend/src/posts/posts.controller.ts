@@ -27,8 +27,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  // @Roles('admin')
-  // @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Post()
   @UseInterceptors(FileInterceptor('thumbnail'))
   create(
@@ -83,11 +83,15 @@ export class PostsController {
     return this.postsService.findOne(id);
   }
 
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(id, updatePostDto);
   }
 
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postsService.remove(id);
