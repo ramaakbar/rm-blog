@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './post.entity';
+import { buildPaginator } from 'typeorm-cursor-pagination';
 
 @Injectable()
 export class PostsService {
@@ -45,18 +46,92 @@ export class PostsService {
     }
   }
 
-  async findAll() {
-    const posts = await this.postsRepository.find();
+  async findAll(query?: {
+    limit: number;
+    nextCursor: string;
+    prevCursor: string;
+    category: string;
+  }) {
+    const category = await this.categoriesRepository.findOneBy({
+      name: query.category,
+    });
+
+    if (!category) throw new BadRequestException('Category not found');
+
+    const queryBuilder =
+      query.category === null
+        ? this.postsRepository
+            .createQueryBuilder('post')
+            .leftJoinAndSelect('post.category', 'category')
+            .select([
+              'post.id',
+              'post.title',
+              'post.body',
+              'post.views',
+              'post.likes',
+              'post.thumbnail',
+              'post.created_at',
+              'post.updated_at',
+              'category.id',
+              'category.name',
+            ])
+        : this.postsRepository
+            .createQueryBuilder('post')
+            .where('post.category = :category', { category: category.id })
+            .leftJoinAndSelect('post.category', 'category')
+            .select([
+              'post.id',
+              'post.title',
+              'post.body',
+              'post.views',
+              'post.likes',
+              'post.thumbnail',
+              'post.created_at',
+              'post.updated_at',
+              'category.id',
+              'category.name',
+            ]);
+
+    const paginator = buildPaginator({
+      entity: Post,
+      paginationKeys: ['created_at'],
+      query: {
+        limit: query.limit,
+        order: 'DESC',
+        afterCursor: query.nextCursor,
+        beforeCursor: query.prevCursor,
+      },
+    });
+
+    const { data, cursor } = await paginator.paginate(queryBuilder);
     return {
       message: 'successfully retrieve all posts',
-      data: posts,
+      pagination: {
+        next_cursor: cursor.afterCursor,
+        prev_cursor: cursor.beforeCursor,
+        count: data.length,
+      },
+      data,
     };
   }
+
+  // async findAllOffset(query?: { limit: number; page: number }) {
+
+  // }
 
   async findOne(id: string) {
     const post = await this.postsRepository.findOne({
       where: {
         id,
+      },
+      select: {
+        category: {
+          id: true,
+          name: true,
+        },
+      },
+      relations: {
+        category: true,
       },
     });
 

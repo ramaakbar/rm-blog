@@ -12,6 +12,9 @@ import {
   ParseFilePipe,
   FileTypeValidator,
   MaxFileSizeValidator,
+  Query,
+  ParseIntPipe,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -44,8 +47,18 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  findAll(
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit?: number,
+    @Query('next', new DefaultValuePipe(null)) nextCursor?: string,
+    @Query('prev', new DefaultValuePipe(null)) prevCursor?: string,
+    @Query('category', new DefaultValuePipe(null)) category?: string,
+  ) {
+    return this.postsService.findAll({
+      limit,
+      nextCursor,
+      prevCursor,
+      category,
+    });
   }
 
   @Get(':id')

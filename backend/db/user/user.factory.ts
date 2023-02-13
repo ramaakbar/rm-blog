@@ -10,5 +10,11 @@ export default setSeederFactory(User, async (faker) => {
   user.username = faker.internet.userName(firstName, lastName);
   user.picture = faker.internet.avatar();
   user.password = await argon.hash('password');
+  const date = faker.date.between(
+    '2022-01-01T00:00:00.000Z',
+    '2023-01-31T00:00:00.000Z',
+  );
+  user.created_at = date;
+  user.updated_at = date;
   return user;
 });
