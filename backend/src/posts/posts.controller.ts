@@ -52,11 +52,26 @@ export class PostsController {
     @Query('next', new DefaultValuePipe(null)) nextCursor?: string,
     @Query('prev', new DefaultValuePipe(null)) prevCursor?: string,
     @Query('category', new DefaultValuePipe(null)) category?: string,
+    @Query('order', new DefaultValuePipe('desc')) order?: string,
   ) {
     return this.postsService.findAll({
       limit,
       nextCursor,
       prevCursor,
+      category,
+      order,
+    });
+  }
+
+  @Get('offset')
+  findAllOffset(
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit?: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('category', new DefaultValuePipe(null)) category?: string,
+  ) {
+    return this.postsService.findAllOffset({
+      limit,
+      page,
       category,
     });
   }

@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './post.entity';
-import { buildPaginator } from 'typeorm-cursor-pagination';
+import { buildPaginator, Order } from 'typeorm-cursor-pagination';
 
 @Injectable()
 export class PostsService {
@@ -51,10 +51,12 @@ export class PostsService {
     nextCursor: string;
     prevCursor: string;
     category: string;
+    order: string;
   }) {
     const category = await this.categoriesRepository.findOneBy({
       name: query.category,
     });
+    //search
 
     if (!category) throw new BadRequestException('Category not found');
 
@@ -97,7 +99,7 @@ export class PostsService {
       paginationKeys: ['created_at'],
       query: {
         limit: query.limit,
-        order: 'DESC',
+        order: Order[query.order.toUpperCase()],
         afterCursor: query.nextCursor,
         beforeCursor: query.prevCursor,
       },
@@ -115,9 +117,51 @@ export class PostsService {
     };
   }
 
-  // async findAllOffset(query?: { limit: number; page: number }) {
+  async findAllOffset(query?: {
+    limit: number;
+    page: number;
+    category: string;
+  }) {
+    const category = await this.categoriesRepository.findOneBy({
+      name: query.category,
+    });
+    //search
 
-  // }
+    if (!category) throw new BadRequestException('Category not found');
+
+    const postsCount = await this.postsRepository.count();
+
+    if (!postsCount)
+      return {
+        message: 'succesffuly retreive, but no data',
+        data: [],
+      };
+
+    const pageCount = Math.ceil(postsCount / query.limit);
+
+    if (query.page > pageCount) throw new BadRequestException('Page not found');
+
+    const posts = await this.postsRepository.find({
+      order: {
+        created_at: 'DESC',
+      },
+      skip: query.limit * (query.page - 1),
+      take: query.limit,
+    });
+
+    return {
+      message: 'successfully retrieve all posts',
+      pagination: {
+        total: postsCount,
+        page_count: pageCount,
+        current_page: query.page,
+        perPage: query.limit,
+        from: (query.page - 1) * query.limit + 1,
+        to: (query.page - 1) * query.limit + (await posts).length,
+      },
+      data: posts,
+    };
+  }
 
   async findOne(id: string) {
     const post = await this.postsRepository.findOne({
