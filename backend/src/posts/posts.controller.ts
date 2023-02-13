@@ -68,7 +68,7 @@ export class PostsController {
   @Get('offset')
   findAllOffset(
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit?: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('p', new DefaultValuePipe(1), ParseIntPipe) page?: number,
     @Query('category', new DefaultValuePipe(null)) category?: string,
   ) {
     return this.postsService.findAllOffset({

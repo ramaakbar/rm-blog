@@ -6,6 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,8 +24,12 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit?: number,
+    @Query('p', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('order', new DefaultValuePipe('desc')) order?: string,
+  ) {
+    return this.usersService.findAll({ limit, page, order });
   }
 
   @Get(':id')

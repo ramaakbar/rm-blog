@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Order } from 'typeorm-cursor-pagination';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
@@ -16,7 +17,19 @@ export class UsersService {
     return 'This action adds a new user';
   }
 
-  async findAll() {
+  async findAll(query?: { limit: number; page: number; order: string }) {
+    const usersCount = await this.usersRepository.count();
+
+    if (!usersCount)
+      return {
+        message: 'successfuly retrive, but no data',
+        data: [],
+      };
+
+    const pageCount = Math.ceil(usersCount / query.limit);
+
+    if (query.page > pageCount) throw new BadRequestException('Page not found');
+
     const users = await this.usersRepository.find({
       select: {
         id: true,
@@ -25,8 +38,24 @@ export class UsersService {
         picture: true,
         role: true,
       },
+      order: {
+        created_at: Order[query.order.toUpperCase()],
+      },
+      skip: query.limit * (query.page - 1),
+      take: query.limit,
     });
-    return { data: users };
+    return {
+      message: 'successfully retrieve all users',
+      pagination: {
+        total: usersCount,
+        page_count: pageCount,
+        current_page: query.page,
+        perPage: query.limit,
+        from: (query.page - 1) * query.limit + 1,
+        to: (query.page - 1) * query.limit + users.length,
+      },
+      data: users,
+    };
   }
 
   findOne(id: number) {

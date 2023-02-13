@@ -149,7 +149,7 @@ export class PostsService {
         current_page: query.page,
         perPage: query.limit,
         from: (query.page - 1) * query.limit + 1,
-        to: (query.page - 1) * query.limit + (await posts).length,
+        to: (query.page - 1) * query.limit + posts.length,
       },
       data: posts,
     };
