@@ -53,6 +53,7 @@ export class PostsController {
     @Query('prev', new DefaultValuePipe(null)) prevCursor?: string,
     @Query('category', new DefaultValuePipe(null)) category?: string,
     @Query('order', new DefaultValuePipe('desc')) order?: string,
+    @Query('q', new DefaultValuePipe(null)) search?: string,
   ) {
     return this.postsService.findAll({
       limit,
@@ -60,6 +61,7 @@ export class PostsController {
       prevCursor,
       category,
       order,
+      search,
     });
   }
 

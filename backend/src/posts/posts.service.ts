@@ -52,6 +52,7 @@ export class PostsService {
     prevCursor: string;
     category: string;
     order: string;
+    search: string;
   }) {
     const category = await this.categoriesRepository.findOneBy({
       name: query.category,
@@ -60,39 +61,26 @@ export class PostsService {
 
     if (!category) throw new BadRequestException('Category not found');
 
-    const queryBuilder =
-      query.category === null
-        ? this.postsRepository
-            .createQueryBuilder('post')
-            .leftJoinAndSelect('post.category', 'category')
-            .select([
-              'post.id',
-              'post.title',
-              'post.body',
-              'post.views',
-              'post.likes',
-              'post.thumbnail',
-              'post.created_at',
-              'post.updated_at',
-              'category.id',
-              'category.name',
-            ])
-        : this.postsRepository
-            .createQueryBuilder('post')
-            .where('post.category = :category', { category: category.id })
-            .leftJoinAndSelect('post.category', 'category')
-            .select([
-              'post.id',
-              'post.title',
-              'post.body',
-              'post.views',
-              'post.likes',
-              'post.thumbnail',
-              'post.created_at',
-              'post.updated_at',
-              'category.id',
-              'category.name',
-            ]);
+    let queryBuilder = this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.category', 'category')
+      .select([
+        'post.id',
+        'post.title',
+        'post.body',
+        'post.views',
+        'post.likes',
+        'post.thumbnail',
+        'post.created_at',
+        'post.updated_at',
+        'category.id',
+        'category.name',
+      ]);
+
+    if (query.category !== null)
+      queryBuilder = queryBuilder.where('post.category = :category', {
+        category: category.id,
+      });
 
     const paginator = buildPaginator({
       entity: Post,
