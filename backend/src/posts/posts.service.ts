@@ -57,7 +57,6 @@ export class PostsService {
     const category = await this.categoriesRepository.findOneBy({
       name: query.category,
     });
-    //search
 
     if (!category) throw new BadRequestException('Category not found');
 
@@ -80,6 +79,11 @@ export class PostsService {
     if (query.category !== null)
       queryBuilder = queryBuilder.where('post.category = :category', {
         category: category.id,
+      });
+
+    if (query.search !== null)
+      queryBuilder = queryBuilder.where('post.title like :title', {
+        title: `%${query.search}%`,
       });
 
     const paginator = buildPaginator({
