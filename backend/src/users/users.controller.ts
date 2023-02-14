@@ -14,17 +14,19 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
   UseInterceptors,
-  Optional,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AdminAuthGuard, UserAuthGuard } from 'src/auth/guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AdminAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('picture'))
   async create(
@@ -57,6 +59,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(UserAuthGuard)
   @Patch(':id')
   @UseInterceptors(FileInterceptor('picture'))
   update(
@@ -76,6 +79,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto, picture);
   }
 
+  @UseGuards(AdminAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);

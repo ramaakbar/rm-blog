@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from 'src/auth/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/auth/guard';
+import { AdminAuthGuard, JwtAuthGuard, RoleGuard } from 'src/auth/guard';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 
@@ -16,8 +16,7 @@ import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Roles('admin')
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AdminAuthGuard)
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
@@ -28,8 +27,7 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
-  @Roles('admin')
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AdminAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,

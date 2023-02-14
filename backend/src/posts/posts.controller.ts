@@ -19,16 +19,14 @@ import {
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Roles } from 'src/auth/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/auth/guard';
+import { AdminAuthGuard } from 'src/auth/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Roles('admin')
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AdminAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('thumbnail'))
   create(
@@ -83,8 +81,7 @@ export class PostsController {
     return this.postsService.findOne(id);
   }
 
-  @Roles('admin')
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AdminAuthGuard)
   @UseInterceptors(FileInterceptor('thumbnail'))
   @Patch(':id')
   update(
@@ -104,8 +101,7 @@ export class PostsController {
     return this.postsService.update(id, updatePostDto, thumbnail);
   }
 
-  @Roles('admin')
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AdminAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postsService.remove(id);
