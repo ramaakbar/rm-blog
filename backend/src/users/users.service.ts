@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from 'typeorm-cursor-pagination';
@@ -115,6 +119,7 @@ export class UsersService {
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
+    req,
     picture: Express.Multer.File,
   ) {
     try {
@@ -130,6 +135,8 @@ export class UsersService {
 
       if (updateUserDto.password)
         updateUserDto.password = await argon.hash(updateUserDto.password);
+
+      if (req.user.role === 'user') delete updateUserDto.role;
 
       await this.usersRepository.update(id, {
         picture: pictureUrl,

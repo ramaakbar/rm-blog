@@ -15,7 +15,9 @@ import {
   MaxFileSizeValidator,
   UseInterceptors,
   UseGuards,
+  Request,
 } from '@nestjs/common';
+import { Request as ReqExpress } from 'express';
 import { UsersService } from './users.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminAuthGuard, UserAuthGuard } from 'src/auth/guard';
@@ -64,6 +66,7 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @Request() req: ReqExpress,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -75,7 +78,7 @@ export class UsersController {
     )
     picture: Express.Multer.File,
   ) {
-    return this.usersService.update(id, updateUserDto, picture);
+    return this.usersService.update(id, updateUserDto, req, picture);
   }
 
   @UseGuards(AdminAuthGuard)

@@ -5,6 +5,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { UserRole } from '../user.entity';
 
 export class CreateUserDto {
   @IsEmail()
@@ -20,4 +21,8 @@ export class CreateUserDto {
   @MinLength(4)
   @MaxLength(20)
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  role: UserRole;
 }
