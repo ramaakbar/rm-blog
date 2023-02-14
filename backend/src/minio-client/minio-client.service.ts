@@ -39,7 +39,9 @@ export class MinioClientService {
   }
 
   public async delete(objName: string) {
-    this.client.removeObject(this.bucketName, objName, (err) => {
+    const fileName = objName.split('/')[4];
+
+    this.client.removeObject(this.bucketName, fileName, (err) => {
       if (err) {
         throw new BadRequestException(
           'Error occured on deleting image, please try again +' + err,
