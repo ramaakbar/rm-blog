@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { LoginDto, RegisterDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
-import { response, Response } from 'express';
+import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

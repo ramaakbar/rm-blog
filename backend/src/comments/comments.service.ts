@@ -8,8 +8,7 @@ import { Request } from 'express';
 import { Post } from 'src/posts/post.entity';
 import { Repository } from 'typeorm';
 import { Comment } from './comment.entity';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CreateCommentDto, UpdateCommentDto } from './dto';
 
 @Injectable()
 export class CommentsService {
