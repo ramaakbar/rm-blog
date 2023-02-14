@@ -85,9 +85,23 @@ export class PostsController {
 
   @Roles('admin')
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseInterceptors(FileInterceptor('thumbnail'))
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(id, updatePostDto);
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 1 }),
+        ],
+        fileIsRequired: false,
+      }),
+    )
+    thumbnail: Express.Multer.File,
+  ) {
+    return this.postsService.update(id, updatePostDto, thumbnail);
   }
 
   @Roles('admin')

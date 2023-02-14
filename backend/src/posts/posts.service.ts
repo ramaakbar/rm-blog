@@ -179,7 +179,11 @@ export class PostsService {
     };
   }
 
-  async update(id: string, updatePostDto: UpdatePostDto) {
+  async update(
+    id: string,
+    updatePostDto: UpdatePostDto,
+    thumbnail: Express.Multer.File,
+  ) {
     try {
       const post = await this.postsRepository.findOne({
         where: {
@@ -189,7 +193,17 @@ export class PostsService {
 
       if (!post) throw new BadRequestException('Post not found');
 
-      await this.postsRepository.update(id, updatePostDto);
+      let thumbnailUrl = post.thumbnail;
+
+      if (thumbnail) {
+        await this.minioClientService.delete(thumbnailUrl);
+        thumbnailUrl = await this.minioClientService.upload(thumbnail);
+      }
+
+      await this.postsRepository.update(id, {
+        thumbnail: thumbnailUrl,
+        ...updatePostDto,
+      });
 
       return {
         message: 'successfully update post',
@@ -210,6 +224,7 @@ export class PostsService {
       if (!post) throw new BadRequestException('Post not found');
 
       await this.postsRepository.delete(id);
+      await this.minioClientService.delete(post.thumbnail);
       return {
         message: 'successfully delete post',
       };
