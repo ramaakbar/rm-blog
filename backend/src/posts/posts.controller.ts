@@ -17,10 +17,9 @@ import {
   DefaultValuePipe,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { AdminAuthGuard } from 'src/auth/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreatePostDto, UpdatePostDto } from './dto';
 
 @Controller('posts')
 export class PostsController {

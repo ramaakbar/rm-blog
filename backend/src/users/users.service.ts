@@ -2,11 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from 'typeorm-cursor-pagination';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import * as argon from 'argon2';
 import { MinioClientService } from 'src/minio-client/minio-client.service';
+import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {

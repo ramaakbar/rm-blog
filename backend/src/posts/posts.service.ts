@@ -3,10 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/categories/category.entity';
 import { MinioClientService } from 'src/minio-client/minio-client.service';
 import { Repository } from 'typeorm';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './post.entity';
 import { buildPaginator, Order } from 'typeorm-cursor-pagination';
+import { CreatePostDto, UpdatePostDto } from './dto';
 
 @Injectable()
 export class PostsService {

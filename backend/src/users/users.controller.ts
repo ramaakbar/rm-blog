@@ -17,10 +17,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminAuthGuard, UserAuthGuard } from 'src/auth/guard';
+import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Controller('users')
 export class UsersController {

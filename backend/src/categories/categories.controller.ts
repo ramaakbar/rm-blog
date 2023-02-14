@@ -7,8 +7,7 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { Roles } from 'src/auth/decorators';
-import { AdminAuthGuard, JwtAuthGuard, RoleGuard } from 'src/auth/guard';
+import { AdminAuthGuard } from 'src/auth/guard';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 
