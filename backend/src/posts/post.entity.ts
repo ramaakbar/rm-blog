@@ -35,9 +35,7 @@ export class Post {
   @ManyToOne(() => Category, (category) => category.posts)
   category: Category;
 
-  @OneToMany(() => Comment, (comment) => comment.post, {
-    eager: true,
-  })
+  @OneToMany(() => Comment, (comment) => comment.post, {})
   comments: Comment[];
 
   @CreateDateColumn()
