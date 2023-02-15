@@ -19,12 +19,12 @@ export class PostsService {
 
   async create(thumbnail: Express.Multer.File, createPostDto: CreatePostDto) {
     try {
-      const findCategory = await this.categoriesRepository.findOne({
+      const category = await this.categoriesRepository.findOne({
         where: {
           id: createPostDto.categoryId,
         },
       });
-      if (!findCategory) throw new BadRequestException('Category not found');
+      if (!category) throw new BadRequestException('Category not found');
 
       const picUrl = await this.minioClientService.upload(thumbnail);
 
@@ -32,7 +32,7 @@ export class PostsService {
       post.title = createPostDto.title;
       post.body = createPostDto.body;
       post.thumbnail = picUrl;
-      post.category = findCategory;
+      post.category = category;
 
       const createdPost = await this.postsRepository.save(post);
 
@@ -116,7 +116,6 @@ export class PostsService {
     const category = await this.categoriesRepository.findOneBy({
       name: query.category,
     });
-    //search
 
     if (!category) throw new BadRequestException('Category not found');
 
