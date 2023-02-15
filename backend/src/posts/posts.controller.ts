@@ -20,7 +20,9 @@ import { PostsService } from './posts.service';
 import { AdminAuthGuard } from 'src/auth/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreatePostDto, UpdatePostDto } from './dto';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
@@ -28,6 +30,7 @@ export class PostsController {
   @UseGuards(AdminAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('thumbnail'))
+  @ApiConsumes('multipart/form-data')
   create(
     @UploadedFile(
       new ParseFilePipe({

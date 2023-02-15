@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -22,6 +23,7 @@ export class CreateUserDto {
   @MaxLength(20)
   password: string;
 
+  @ApiPropertyOptional({ enum: ['Admin', 'Moderator', 'User'] })
   @IsString()
   @IsNotEmpty()
   role: UserRole;

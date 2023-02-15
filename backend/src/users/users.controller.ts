@@ -22,7 +22,9 @@ import { UsersService } from './users.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminAuthGuard, UserAuthGuard } from 'src/auth/guard';
 import { CreateUserDto, UpdateUserDto } from './dto';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -46,6 +48,7 @@ export class UsersController {
     return this.usersService.create(picture, createUserDto);
   }
 
+  // @ApiQuery({ name: 'order', enum: 'sadas' | 'sadasd' })
   @Get()
   findAll(
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit?: number,
