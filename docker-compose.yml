@@ -11,3 +11,14 @@ services:
     command: pnpm start:dev
     ports:
       - 4000:3000
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+      target: development
+    volumes:
+      - ./client/src:/app/client/src
+      - ./client/public:/app/client/public
+    command: pnpm dev
+    ports:
+      - 3000:3000
