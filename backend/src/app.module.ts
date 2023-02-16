@@ -10,6 +10,7 @@ import { DataSource } from 'typeorm';
 import { dataSourceOptions } from 'db/data-source';
 import { AuthModule } from './auth/auth.module';
 import { MinioClientModule } from './minio-client/minio-client.module';
+import { Gpt3Module } from './gpt3/gpt3.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MinioClientModule } from './minio-client/minio-client.module';
     CommentsModule,
     CategoriesModule,
     AuthModule,
+    Gpt3Module,
   ],
   controllers: [AppController],
 })
