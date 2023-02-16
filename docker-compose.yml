@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+      target: development
+    volumes:
+      - ./backend/src:/app/backend/src
+    env_file:
+      - ./backend/.env
+    command: pnpm start:dev
+    ports:
+      - 4000:3000
