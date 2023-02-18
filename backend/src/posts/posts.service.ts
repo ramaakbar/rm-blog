@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { buildPaginator, Order } from 'typeorm-cursor-pagination';
 import { CreatePostDto, UpdatePostDto } from './dto';
+import slugify from 'slugify';
 
 @Injectable()
 export class PostsService {
@@ -30,6 +31,7 @@ export class PostsService {
 
       const post = new Post();
       post.title = createPostDto.title;
+      post.slug = slugify(createPostDto.title, '-');
       post.body = createPostDto.body;
       post.thumbnail = picUrl;
       post.category = category;
@@ -65,6 +67,7 @@ export class PostsService {
       .select([
         'post.id',
         'post.title',
+        'post.slug',
         'post.body',
         'post.views',
         'post.likes',
@@ -198,10 +201,18 @@ export class PostsService {
         thumbnailUrl = await this.minioClientService.upload(thumbnail);
       }
 
-      await this.postsRepository.update(id, {
-        thumbnail: thumbnailUrl,
-        ...updatePostDto,
-      });
+      if (updatePostDto.title) {
+        await this.postsRepository.update(id, {
+          thumbnail: thumbnailUrl,
+          slug: slugify(updatePostDto.title),
+          ...updatePostDto,
+        });
+      } else {
+        await this.postsRepository.update(id, {
+          thumbnail: thumbnailUrl,
+          ...updatePostDto,
+        });
+      }
 
       return {
         message: 'successfully update post',

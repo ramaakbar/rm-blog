@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class migration1676385857819 implements MigrationInterface {
-  name = 'migration1676385857819';
+export class migration1676732434496 implements MigrationInterface {
+  name = 'migration1676732434496';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,7 +11,7 @@ export class migration1676385857819 implements MigrationInterface {
       `CREATE TABLE \`comment\` (\`id\` varchar(36) NOT NULL, \`body\` varchar(255) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`userId\` varchar(36) NULL, \`postId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`post\` (\`id\` varchar(36) NOT NULL, \`title\` varchar(255) NOT NULL, \`body\` text NOT NULL, \`views\` double NOT NULL DEFAULT '0', \`likes\` double NOT NULL DEFAULT '0', \`thumbnail\` varchar(255) NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`categoryId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`post\` (\`id\` varchar(36) NOT NULL, \`slug\` varchar(255) NOT NULL, \`title\` varchar(255) NOT NULL, \`body\` text NOT NULL, \`views\` double NOT NULL DEFAULT '0', \`likes\` double NOT NULL DEFAULT '0', \`thumbnail\` varchar(255) NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`categoryId\` int NULL, UNIQUE INDEX \`IDX_cd1bddce36edc3e766798eab37\` (\`slug\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `CREATE TABLE \`category\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), UNIQUE INDEX \`IDX_23c05c292c439d77b0de816b50\` (\`name\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
@@ -41,6 +41,9 @@ export class migration1676385857819 implements MigrationInterface {
       `DROP INDEX \`IDX_23c05c292c439d77b0de816b50\` ON \`category\``,
     );
     await queryRunner.query(`DROP TABLE \`category\``);
+    await queryRunner.query(
+      `DROP INDEX \`IDX_cd1bddce36edc3e766798eab37\` ON \`post\``,
+    );
     await queryRunner.query(`DROP TABLE \`post\``);
     await queryRunner.query(`DROP TABLE \`comment\``);
     await queryRunner.query(
