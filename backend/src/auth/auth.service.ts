@@ -72,7 +72,7 @@ export class AuthService {
       secure:
         this.configService.get('APP_ENV') === 'development' ? false : true,
       sameSite: 'none',
-      maxAge: 60000,
+      maxAge: 300000,
     });
 
     return {
