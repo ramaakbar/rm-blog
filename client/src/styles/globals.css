@@ -8,7 +8,7 @@
 
 @layer base {
   :root {
-    --base: hsl(0, 0%, 97%);
+    --base: hsl(0, 0%, 100%);
     --base-focus: hsl(0, 0%, 81%);
     --base-2: hsl(0, 0%, 93%);
     --base-2-focus: hsl(0, 0%, 89%);
@@ -75,8 +75,8 @@
     --overlay-content: hsl(120, 2%, 100%);
     --overlay-content-2: hsl(120, 2%, 90%);
     --overlay-content-3: hsl(120, 2%, 80%);
-    --line: hsl(120, 2%, 1.2%);
-    --line-focus: hsl(120, 2%, 17.7%);
+    --line: hsl(120, 2%, 17.7%);
+    --line-focus: hsl(120, 2%, 37.5%);
     --input: hsl(120, 2%, 13.3%);
     --input-focus: hsl(120, 2%, 13.3%);
     --input-content: hsl(120, 2%, 100%);
