@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import Button from "@/components/button";
 import CustomHead from "@/components/customHead";
 import { FieldWrapper, Input } from "@/components/forms";
-import Navbar from "@/components/navbar";
+import Layout from "@/components/layout";
 
 export default function Register() {
   const {
@@ -33,8 +33,7 @@ export default function Register() {
   return (
     <>
       <CustomHead title="RM Blog - Register" />
-      <Navbar />
-      <div className="mx-auto max-w-xl p-4">
+      <Layout>
         <h1 className="font-bold text-2xl mb-5">Register</h1>
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <FieldWrapper label="Email" error={errors.email}>
@@ -81,7 +80,7 @@ export default function Register() {
             Register
           </Button>
         </form>
-      </div>
+      </Layout>
     </>
   );
 }

@@ -1,14 +1,13 @@
 import Image from "next/image";
-import { useUser } from "@/features/auth/hooks";
 
 import CustomHead from "@/components/customHead";
-import Layout from "@/components/layout";
+import HomeLayout from "@/components/homeLayout";
 
 export default function Home() {
   return (
     <>
       <CustomHead title="RM Blog" />
-      <Layout>
+      <HomeLayout>
         <div>
           <h3>Search</h3>
           <input type="text" placeholder="search" />
@@ -35,7 +34,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </Layout>
+      </HomeLayout>
     </>
   );
 }

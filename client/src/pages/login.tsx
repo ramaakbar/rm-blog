@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import Button from "@/components/button";
 import CustomHead from "@/components/customHead";
 import { FieldWrapper, Input } from "@/components/forms";
-import Navbar from "@/components/navbar";
+import Layout from "@/components/layout";
 
 export default function Login() {
   const {
@@ -33,8 +33,7 @@ export default function Login() {
   return (
     <>
       <CustomHead title="RM Blog - Login" />
-      <Navbar />
-      <div className="mx-auto max-w-xl p-4">
+      <Layout>
         <h1 className="font-bold text-2xl mb-5">Login</h1>
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <FieldWrapper label="Email" error={errors.email}>
@@ -60,7 +59,7 @@ export default function Login() {
             Login
           </Button>
         </form>
-      </div>
+      </Layout>
     </>
   );
 }
