@@ -29,7 +29,7 @@ export class AuthController {
     return this.authService.login(dto, res);
   }
 
-  @Get('logout')
+  @Post('logout')
   async logout(
     @Req() req: RequestEx,
     @Res({ passthrough: true }) res: Response,

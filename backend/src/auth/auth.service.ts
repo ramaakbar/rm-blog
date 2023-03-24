@@ -69,8 +69,7 @@ export class AuthService {
 
     res.cookie('access_token', access_token, {
       httpOnly: true,
-      secure:
-        this.configService.get('APP_ENV') === 'development' ? false : true,
+      secure: true,
       sameSite: 'none',
       maxAge: 300000,
     });
