@@ -12,7 +12,11 @@ axios.interceptors.response.use(
   },
   (error) => {
     const message = error.response?.data?.message || error.message;
-    if (error.response?.data?.statusCode === 401) return Promise.reject(error);
+    if (
+      error.response?.data?.statusCode === 401 &&
+      error.response?.config.method === "get"
+    )
+      return Promise.reject(error);
     toast.error(message);
 
     return Promise.reject(error);

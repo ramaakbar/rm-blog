@@ -12,9 +12,11 @@ export const registerSchema = z
     username: z.string().min(1, "Username is required"),
     email: z.string().min(1, "Email is required").email("Invalid email"),
     password: z.string().min(1, "Password is required"),
-    confirmPassword: z.string().min(1, "Password confirmation is required"),
+    passwordConfirmation: z
+      .string()
+      .min(1, "Password confirmation is required"),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.passwordConfirmation, {
     path: ["confirmPassword"],
     message: "Passwords do not match",
   });

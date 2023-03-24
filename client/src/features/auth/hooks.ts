@@ -5,7 +5,7 @@ import { queryClient } from "@/utils/react-query";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { LoginType, userSchema } from "./schemas";
+import { LoginType, RegisterType, userSchema } from "./schemas";
 
 export const useUser = ({ isProtected = false } = {}) => {
   const {
@@ -42,6 +42,18 @@ export const useLogin = () => {
   });
 
   return { login, isLoading };
+};
+
+export const useRegister = () => {
+  const { mutate: register, isLoading } = useMutation({
+    mutationFn: (data: RegisterType) => axios.post("/auth/register", data),
+    onSuccess: () => {
+      Router.push("/login");
+      toast.success("Register Success");
+    },
+  });
+
+  return { register, isLoading };
 };
 
 export const useLogout = () => {
