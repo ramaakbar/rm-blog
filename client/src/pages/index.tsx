@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useUser } from "@/features/auth/hooks";
 
 import CustomHead from "@/components/customHead";
 import Layout from "@/components/layout";
