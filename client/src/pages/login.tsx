@@ -1,3 +1,5 @@
+import { GetServerSideProps } from "next";
+import { Router } from "next/router";
 import { useLogin, useUser } from "@/features/auth/hooks";
 import { LoginType, loginSchema } from "@/features/auth/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +9,22 @@ import Button from "@/components/button";
 import CustomHead from "@/components/customHead";
 import { FieldWrapper, Input } from "@/components/forms";
 import Layout from "@/components/layout";
+
+export const getServerSideProps = (async (context) => {
+  const token = context.req.cookies.access_token;
+
+  if (token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}) satisfies GetServerSideProps;
 
 export default function Login() {
   const {
@@ -20,10 +38,6 @@ export default function Login() {
   });
 
   const { login, isLoading } = useLogin();
-
-  useUser({
-    isProtected: true,
-  });
 
   const onSubmit = (data: LoginType) => {
     login(data);

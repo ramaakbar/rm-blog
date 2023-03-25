@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Router from "next/router";
 import { axios } from "@/utils/axios";
 import { queryClient } from "@/utils/react-query";
@@ -7,7 +6,7 @@ import { toast } from "sonner";
 
 import { LoginType, RegisterType, userSchema } from "./schemas";
 
-export const useUser = ({ isProtected = false } = {}) => {
+export const useUser = () => {
   const {
     data: user,
     isLoading,
@@ -19,14 +18,6 @@ export const useUser = ({ isProtected = false } = {}) => {
       return userSchema.parse(data);
     },
     staleTime: 1000 * 60 * 5,
-  });
-
-  useEffect(() => {
-    if (!isProtected || !user) return;
-
-    if (isProtected && user) {
-      Router.push("/");
-    }
   });
 
   return { user, isLoading, error };

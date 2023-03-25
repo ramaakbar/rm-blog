@@ -1,3 +1,4 @@
+import { GetServerSideProps } from "next";
 import { useRegister, useUser } from "@/features/auth/hooks";
 import { RegisterType, registerSchema } from "@/features/auth/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +8,22 @@ import Button from "@/components/button";
 import CustomHead from "@/components/customHead";
 import { FieldWrapper, Input } from "@/components/forms";
 import Layout from "@/components/layout";
+
+export const getServerSideProps = (async (context) => {
+  const token = context.req.cookies.access_token;
+
+  if (token) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}) satisfies GetServerSideProps;
 
 export default function Register() {
   const {
@@ -20,10 +37,6 @@ export default function Register() {
   });
 
   const { register: signup, isLoading } = useRegister();
-
-  useUser({
-    isProtected: true,
-  });
 
   const onSubmit = (data: RegisterType) => {
     signup(data);
