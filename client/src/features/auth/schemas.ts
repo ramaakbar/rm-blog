@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { object, z } from "zod";
 
 export const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -24,11 +24,14 @@ export const registerSchema = z
 export type RegisterType = z.infer<typeof registerSchema>;
 
 export const userSchema = z.object({
-  id: z.string(),
-  email: z.string().email(),
-  username: z.string(),
-  picture: z.string(),
-  role: z.enum(["user", "admin"]),
+  isLoggedIn: z.boolean(),
+  data: z.object({
+    id: z.string().optional(),
+    email: z.string().optional(),
+    username: z.string().optional(),
+    picture: z.string().optional(),
+    role: z.union([z.literal("user"), z.literal("admin")]).optional(),
+  }),
 });
 
 export type User = z.infer<typeof userSchema>;

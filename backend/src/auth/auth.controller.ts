@@ -48,6 +48,15 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   getMe(@Request() req: RequestEx) {
-    return req.user;
+    if (!req.user) {
+      return {
+        isLoggedIn: false,
+        data: {},
+      };
+    }
+    return {
+      isLoggedIn: true,
+      data: req.user,
+    };
   }
 }

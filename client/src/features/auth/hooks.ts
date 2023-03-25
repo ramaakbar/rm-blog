@@ -18,6 +18,7 @@ export const useUser = () => {
       return userSchema.parse(data);
     },
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
   });
 
   return { user, isLoading, error };
@@ -27,6 +28,7 @@ export const useLogin = () => {
   const { mutate: login, isLoading } = useMutation({
     mutationFn: (data: LoginType) => axios.post("/auth", data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       Router.push("/");
       toast.success("Login Success");
     },

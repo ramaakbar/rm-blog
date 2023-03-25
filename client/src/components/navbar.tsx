@@ -15,13 +15,13 @@ export default function Navbar() {
           <div>User</div>
           <div>dropdown</div>
           <ThemeSwitch />
-          {user && (
+          {user?.isLoggedIn && (
             <>
-              <span>{user?.username}</span>{" "}
+              <span>{user?.data?.username}</span>{" "}
               <div onClick={() => logout()}>Logout</div>
             </>
           )}
-          {!user && (
+          {!user?.isLoggedIn && (
             <>
               <Link href={"/login"}>Login</Link>
               <Link href={"/register"}>Register</Link>
