@@ -12,7 +12,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Request as RequestEx, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
-import { JwtAuthGuard } from './guard';
+import { GoogleOAuthGuard, JwtAuthGuard } from './guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -27,6 +27,21 @@ export class AuthController {
   @Post()
   login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.login(dto, res);
+  }
+
+  @Get('google')
+  @UseGuards(GoogleOAuthGuard)
+  googleLogin() {
+    return {};
+  }
+
+  @Get('google/redirect')
+  @UseGuards(GoogleOAuthGuard)
+  googleRedirect(
+    @Request() req: RequestEx,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.googleLogin(req, res);
   }
 
   @Post('logout')

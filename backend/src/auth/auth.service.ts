@@ -81,4 +81,21 @@ export class AuthService {
       },
     };
   }
+
+  googleLogin(req, res: Response) {
+    if (!req.user) res.redirect(process.env.AUTH_REDIRECT_FAIL);
+
+    const payload = { sub: req.user.id, email: req.user.email };
+
+    const access_token = this.jwtService.sign(payload);
+
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 300000,
+    });
+
+    res.redirect(process.env.AUTH_REDIRECT_SUCCESS);
+  }
 }
