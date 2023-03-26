@@ -79,12 +79,12 @@ export class PostsService {
       ]);
 
     if (query.category !== null)
-      queryBuilder = queryBuilder.where('post.category = :category', {
+      queryBuilder = queryBuilder.andWhere('post.category = :category', {
         category: category.id,
       });
 
     if (query.search !== null)
-      queryBuilder = queryBuilder.where('post.title like :title', {
+      queryBuilder = queryBuilder.andWhere('post.title like :title', {
         title: `%${query.search}%`,
       });
 
@@ -158,10 +158,10 @@ export class PostsService {
     };
   }
 
-  async findOne(id: string) {
+  async findOne(slug: string) {
     const post = await this.postsRepository.findOne({
       where: {
-        id,
+        slug,
       },
       select: {
         category: {

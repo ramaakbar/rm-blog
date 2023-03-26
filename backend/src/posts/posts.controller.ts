@@ -78,9 +78,9 @@ export class PostsController {
     });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.postsService.findOne(slug);
   }
 
   @UseGuards(AdminAuthGuard)
