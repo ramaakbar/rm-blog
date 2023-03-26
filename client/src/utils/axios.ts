@@ -17,6 +17,7 @@ axios.interceptors.response.use(
       error.response?.config.method === "get"
     )
       return Promise.reject(error);
+
     toast.error(message);
 
     return Promise.reject(error);
