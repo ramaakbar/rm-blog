@@ -88,6 +88,8 @@ export class PostsService {
         title: `%${query.search}%`,
       });
 
+    const postCount = await queryBuilder.getCount();
+
     const paginator = buildPaginator({
       entity: Post,
       paginationKeys: ['created_at'],
@@ -105,7 +107,7 @@ export class PostsService {
       pagination: {
         next_cursor: cursor.afterCursor,
         prev_cursor: cursor.beforeCursor,
-        count: data.length,
+        count: postCount,
       },
       data,
     };
