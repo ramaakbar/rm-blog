@@ -43,4 +43,4 @@ export const postsSchema = z.object({
   ),
 });
 
-export type Post = z.infer<typeof postsSchema>["data"][number];
+export type PostType = z.infer<typeof postsSchema>["data"][number];

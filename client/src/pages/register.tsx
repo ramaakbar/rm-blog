@@ -90,7 +90,7 @@ export default function Register() {
               register={register("passwordConfirmation")}
             />
           </FieldWrapper>
-          <Link href="http://localhost:4000/auth/google" className="block">
+          <a href="http://localhost:4000/auth/google" className="block">
             <Button className="flex items-center">
               <svg
                 className="w-4 h-4 mr-2 -ml-1"
@@ -109,7 +109,7 @@ export default function Register() {
               </svg>
               Register with Google
             </Button>
-          </Link>
+          </a>
           <Button type="submit" isLoading={isLoading}>
             Register
           </Button>
