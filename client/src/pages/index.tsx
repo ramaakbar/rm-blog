@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useOrder, usePosts, useSearch } from "@/features/posts/hooks";
 import { SortAsc, SortDesc } from "lucide-react";
@@ -45,9 +46,10 @@ export default function Home() {
             posts?.pages.map((page, i) => (
               <Fragment key={i}>
                 {page.data.map((post) => (
-                  <div
+                  <Link
                     key={post.id}
-                    className="bg-base-2 border border-overlay"
+                    href={`/posts/${post.slug}`}
+                    className="bg-base-2 border border-overlay block"
                   >
                     <Image
                       src={post.thumbnail}
@@ -63,7 +65,7 @@ export default function Home() {
                     <span className="text-base-content-3">
                       {post.created_at}
                     </span>
-                  </div>
+                  </Link>
                 ))}
               </Fragment>
             ))}
