@@ -19,6 +19,8 @@ services:
     volumes:
       - ./client/src:/app/client/src
       - ./client/public:/app/client/public
+    env_file:
+      - ./client/.env
     command: pnpm dev
     ports:
       - 3000:3000

@@ -2,7 +2,8 @@ import Axios from "axios";
 import { toast } from "sonner";
 
 export const axios = Axios.create({
-  baseURL: "http://localhost:4000",
+  // https://stackoverflow.com/questions/62098417/nextjs-docker-compose-how-to-resolve-container-hostname-client-side
+  baseURL: process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL,
   withCredentials: true,
 });
 
