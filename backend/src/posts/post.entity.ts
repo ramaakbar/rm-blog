@@ -37,6 +37,9 @@ export class Post {
   @Column({ nullable: true })
   thumbnail: string;
 
+  @Column({ type: 'int' })
+  categoryId: number;
+
   @ManyToOne(() => Category, (category) => category.posts)
   category: Category;
 

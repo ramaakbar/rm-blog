@@ -203,18 +203,11 @@ export class PostsService {
         thumbnailUrl = await this.minioClientService.upload(thumbnail);
       }
 
-      if (updatePostDto.title) {
-        await this.postsRepository.update(id, {
-          thumbnail: thumbnailUrl,
-          slug: slugify(updatePostDto.title),
-          ...updatePostDto,
-        });
-      } else {
-        await this.postsRepository.update(id, {
-          thumbnail: thumbnailUrl,
-          ...updatePostDto,
-        });
-      }
+      await this.postsRepository.update(id, {
+        thumbnail: thumbnailUrl,
+        slug: updatePostDto.title ? slugify(updatePostDto.title) : post.slug,
+        ...updatePostDto,
+      });
 
       return {
         message: 'successfully update post',

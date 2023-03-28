@@ -17,10 +17,16 @@ export class Comment {
   @Column()
   body: string;
 
+  @Column({ type: 'int' })
+  userId: number;
+
   @ManyToOne(() => User, (user) => user.comments, {
     onDelete: 'CASCADE',
   })
   user: User;
+
+  @Column({ type: 'int' })
+  postId: number;
 
   @ManyToOne(() => Post, (post) => post.comments, {
     onDelete: 'CASCADE',
