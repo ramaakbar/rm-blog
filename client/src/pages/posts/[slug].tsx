@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { PostType, postsSchema } from "@/features/posts/schemas";
 import { axios } from "@/utils/axios";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 import CustomHead from "@/components/customHead";
 import Navbar from "@/components/navbar";
@@ -51,7 +51,8 @@ type PostProps = InferGetStaticPropsType<typeof getStaticProps>;
 export default function Post(props: PostProps) {
   const { isFallback } = useRouter();
 
-  const date = format(new Date(props.created_at), "dd MMM yyyy");
+  const newDate = new Date(props.created_at);
+  const date = formatInTimeZone(newDate, "America/New_York", "dd MMM yyyy");
 
   return (
     <>
@@ -76,7 +77,12 @@ export default function Post(props: PostProps) {
                 <p>{props.likes} likes</p>
                 <p>{date}</p>
               </div>
-              <div className="prose md:prose-base">{props.body}</div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: props.body,
+                }}
+                className="prose prose-base"
+              />
             </article>
           </>
         )}

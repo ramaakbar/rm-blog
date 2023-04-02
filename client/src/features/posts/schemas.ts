@@ -18,6 +18,7 @@ export const categorySchema = z.object({
   updated_at: z.string().optional(),
 });
 
+export type Categories = z.infer<typeof categoriesSchema>;
 export type Category = z.infer<typeof categoriesSchema>["data"][number];
 
 export const postsSchema = z.object({
