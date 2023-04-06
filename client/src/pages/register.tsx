@@ -90,7 +90,7 @@ export default function Register() {
               register={register("passwordConfirmation")}
             />
           </FieldWrapper>
-          <a href="http://localhost:4000/auth/google" className="block">
+          <a href={process.env.NEXT_PUBLIC_GOOGLE_SIGNIN_URL} className="block">
             <Button className="flex items-center">
               <svg
                 className="w-4 h-4 mr-2 -ml-1"
