@@ -3,19 +3,19 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./backend
-      target: development
+      target: production
     volumes:
       - ./backend/src:/app/backend/src
     env_file:
       - ./backend/.env
-    command: pnpm start:dev
+    command: pnpm start:prod
     ports:
       - 4000:3000
   client:
     build:
       dockerfile: Dockerfile
       context: ./client
-      target: development
+      target: production
     volumes:
       - ./client/src:/app/client/src
       - ./client/public:/app/client/public
