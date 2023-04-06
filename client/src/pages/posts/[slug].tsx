@@ -35,8 +35,11 @@ export const getStaticProps = (async (context) => {
     const res = await axios.get<PostType>(`/posts/${slug}`);
     const post = res.data;
 
+    const newDate = new Date(post.created_at);
+    const date = formatInTimeZone(newDate, "America/New_York", "dd MMM yyyy");
+
     return {
-      props: post,
+      props: { ...post, date },
       revalidate: 60,
     };
   } catch (error) {
@@ -50,9 +53,6 @@ type PostProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 export default function Post(props: PostProps) {
   const { isFallback } = useRouter();
-
-  const newDate = new Date(props.created_at);
-  const date = formatInTimeZone(newDate, "America/New_York", "dd MMM yyyy");
 
   return (
     <>
@@ -75,7 +75,7 @@ export default function Post(props: PostProps) {
                 <p>{props.category.name}</p>
                 <p>{props.views} views</p>
                 <p>{props.likes} likes</p>
-                <p>{date}</p>
+                <p>{props.date}</p>
               </div>
               <div
                 dangerouslySetInnerHTML={{
