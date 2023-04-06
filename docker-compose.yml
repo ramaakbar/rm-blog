@@ -7,7 +7,7 @@ services:
     volumes:
       - ./backend/src:/app/backend/src
     env_file:
-      - ./backend/.env
+      - .env
     command: pnpm start:prod
     ports:
       - 4000:3000
@@ -20,7 +20,7 @@ services:
       - ./client/src:/app/client/src
       - ./client/public:/app/client/public
     env_file:
-      - ./client/.env
+      - .env
     command: pnpm dev
     ports:
       - 3000:3000
