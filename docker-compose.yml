@@ -6,8 +6,6 @@ services:
       target: production
     volumes:
       - ./backend/src:/app/backend/src
-    env_file:
-      - .env
     command: pnpm start:prod
     ports:
       - 4000:3000
@@ -19,8 +17,6 @@ services:
     volumes:
       - ./client/src:/app/client/src
       - ./client/public:/app/client/public
-    env_file:
-      - .env
     command: pnpm dev
     ports:
       - 3000:3000
