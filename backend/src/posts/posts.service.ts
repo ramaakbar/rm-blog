@@ -55,12 +55,6 @@ export class PostsService {
     order: string;
     search: string;
   }) {
-    const category = await this.categoriesRepository.findOneBy({
-      name: query.category,
-    });
-
-    if (!category) throw new BadRequestException('Category not found');
-
     let queryBuilder = this.postsRepository
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.category', 'category')
@@ -78,10 +72,17 @@ export class PostsService {
         'category.name',
       ]);
 
-    if (query.category !== null)
+    if (query.category) {
+      const category = await this.categoriesRepository.findOneBy({
+        name: query.category,
+      });
+
+      if (!category) throw new BadRequestException('Category not found');
+
       queryBuilder = queryBuilder.andWhere('post.category = :category', {
         category: category.id,
       });
+    }
 
     if (query.search !== null)
       queryBuilder = queryBuilder.andWhere('post.title like :title', {
